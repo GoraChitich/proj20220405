@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Col, Row } from 'react-bootstrap';
+import { Button, Form, Col, Row, Spinner } from 'react-bootstrap';
 import { Answer } from '../interfaces';
 import "./AddGetWord.css"
 
@@ -7,6 +7,8 @@ export const AddGetWord: React.FC<any> = (params) => {
   const [wordCode,setWordCode] = useState("");
   const [listLang,setListLang] = useState("");
   const [text,setText] = useState("");
+  const [spinnerAdd, setSpinnerAdd] = useState(false);
+  const [spinnerGet, setSpinnerGet] = useState(false);
 
   const handleSubmit = (event:any)=>{
     event.preventDefault();
@@ -22,8 +24,10 @@ export const AddGetWord: React.FC<any> = (params) => {
         alert("Check field Text!");
         return;
       }
+      setSpinnerAdd(true);
       params.db.add(wordCode,listLang,text).then( (result:Answer) =>{
-          if(result.success) alert("Added!") 
+        setSpinnerAdd(false);  
+        if(result.success) alert("Added!") 
           else alert("Error: "+result.message);
         })
     }
@@ -32,8 +36,10 @@ export const AddGetWord: React.FC<any> = (params) => {
 
   const get = () =>{
     if(validForm())
+      setSpinnerGet(true);
       params.db.get(wordCode,listLang).then(
         (result:Answer) =>{
+          setSpinnerGet(false);
           if(result.success) alert("Text: "+result.message) 
           else alert("Error: "+result.message);
         }
@@ -68,10 +74,39 @@ export const AddGetWord: React.FC<any> = (params) => {
               </Form.Group>
             </Col>
             <Col sm={1} className="col-btn">
-              <Button type="submit" variant="primary" onClick={add}>Add</Button>
+              <Button 
+                type="submit" 
+                variant="primary" 
+                onClick={add}
+                disabled= {spinnerAdd || spinnerGet}>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className={spinnerAdd ? '': 'hidden'}
+                  />
+              <span>Add</span>
+              </Button>
             </Col>
             <Col sm={1} className="col-btn">
-              <Button type="submit" variant="primary" onClick={get}>Get</Button>
+              <Button 
+                type="submit" 
+                variant="primary" 
+                onClick={get}
+                disabled= {spinnerAdd || spinnerGet}>
+                <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className={spinnerGet ? '': 'hidden'}
+                  />
+                <span>Get</span>
+              
+              </Button>
             </Col>
           </Row>
         </Form>

@@ -27,6 +27,7 @@ export default class myFB{
           WordCode,
           Text
         });
+        console.log(resultSet);
         if(resultSet.id) return {success:true}
         else return {success:false} 
  
@@ -36,6 +37,7 @@ export default class myFB{
         const WordCode = WordCodeP.trim().toLocaleLowerCase();
         const q = query(this.col, where("CodeLanguage", "==", CodeLanguage), where("WordCode","==",WordCode));
         const docs = await getDocs(q);
+        console.log(docs);
         if(!docs.docs.length){
           return {success: false, message:"not found"}
         }else{
