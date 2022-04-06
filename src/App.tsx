@@ -1,42 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import * as Realm from "realm-web";
+import { AddGetWord } from './components/AddGetWord';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { initializeApp } from 'firebase/app';
+import { getFirestore} from "firebase/firestore";
+import AddGetDB from "./AddGetDB"
 
-const REALM_APP_ID = "application-0-rdrtd"; // e.g. myapp-abcde
-const app: Realm.App = new Realm.App({ id: REALM_APP_ID });
+const firebaseConfig = {
+  apiKey: "AIzaSyAGjFkvUH9Mq6-riXfOTi6W-uLHhZ8LGE4",
+  authDomain: "test20220406-c0538.firebaseapp.com",
+  projectId: "test20220406-c0538",
+  storageBucket: "test20220406-c0538.appspot.com",
+  messagingSenderId: "130647234941",
+  appId: "1:130647234941:web:9144d264d5b937009a1414"
+};
 
-// Create a component that displays the given user's details
-const UserDetail: React.FC<{ user: Realm.User }> = ({ user }) => {
-  return (
-    <div>
-      <h1>Logged in with anonymous id: {user.id}</h1>
-    </div>
-  );
-}
+initializeApp(firebaseConfig);
+const defaultFirestore = getFirestore();
 
-// Create a component that lets an anonymous user log in
-const Login: React.FC<{ setUser: (user: Realm.User) => void }> = ({ setUser }) => {
-  const loginAnonymous = async () => {
-    const user: Realm.User = await app.logIn(Realm.Credentials.anonymous());
-    setUser(user);
-  };
-  return <button onClick={loginAnonymous}>Log In</button>;
-}
 
 const App: React.FC = () => {
-  // Keep the logged in Realm user in local state. This lets the app re-render
-  // whenever the current user changes (e.g. logs in or logs out).
-  const [user, setUser] = React.useState<Realm.User | null>(app.currentUser);
-
-  // If a user is logged in, show their details. Otherwise, show the login screen.
-  return (
-    <div className="App">
-      <div className="App-header">
-        {user ? <UserDetail user={user} /> : <Login setUser={setUser} />}
-      </div>
-    </div>
-  );
+  const DB = new AddGetDB(defaultFirestore);
+  return (<AddGetWord db={DB}/>);
 }
 
 export default App;
