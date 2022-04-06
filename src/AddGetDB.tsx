@@ -12,7 +12,7 @@ export default class myFB{
   
       public async add(WordCodeP:string, CodeLanguage: string,  Text: string){
         //check eng value
-        const WordCode = WordCodeP.toLowerCase();
+        const WordCode = WordCodeP.trim().toLowerCase();
         if(CodeLanguage!=="en"){
           const result = await this.get(WordCodeP,"en");
           if(!result.success) return result;
@@ -33,7 +33,7 @@ export default class myFB{
       }
   
       public async get(WordCodeP:string, CodeLanguage: string){
-        const WordCode = WordCodeP.toLocaleLowerCase();
+        const WordCode = WordCodeP.trim().toLocaleLowerCase();
         const q = query(this.col, where("CodeLanguage", "==", CodeLanguage), where("WordCode","==",WordCode));
         const docs = await getDocs(q);
         if(!docs.docs.length){

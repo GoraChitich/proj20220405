@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Col, Row } from 'react-bootstrap';
+import { Answer } from '../interfaces';
 import "./AddGetWord.css"
 
 export const AddGetWord: React.FC<any> = (params) => {
@@ -21,7 +22,7 @@ export const AddGetWord: React.FC<any> = (params) => {
         alert("Check field Text!");
         return;
       }
-      params.db.add(wordCode,listLang,text).then( (result:any) =>{
+      params.db.add(wordCode,listLang,text).then( (result:Answer) =>{
           if(result.success) alert("Added!") 
           else alert("Error: "+result.message);
         })
@@ -32,7 +33,7 @@ export const AddGetWord: React.FC<any> = (params) => {
   const get = () =>{
     if(validForm())
       params.db.get(wordCode,listLang).then(
-        (result:any) =>{
+        (result:Answer) =>{
           if(result.success) alert("Text: "+result.message) 
           else alert("Error: "+result.message);
         }
@@ -53,7 +54,7 @@ export const AddGetWord: React.FC<any> = (params) => {
               <Form.Group controlId="listLang">
                 <Form.Label>Code lang</Form.Label>
                 <Form.Select required value = {listLang} onChange={(e)=>setListLang(e.target.value)} >
-                  <option value="">Choise...</option>
+                  <option value="">Select language...</option>
                   <option value='en'>English</option>
                   <option value='ru'>Russian</option>
                   <option value='he'>Hebrew</option>
